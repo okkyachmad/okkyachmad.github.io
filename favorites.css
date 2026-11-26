@@ -1,6 +1,6 @@
 
 /* =====================================
-   FAVORITES V7 - COMPACT SVG GRID
+   FAVORITES V7.1 - COMPACT SVG GRID
    ===================================== */
 
 #favorites-app {
@@ -11,24 +11,18 @@
 }
 
 
-/* =====================================
-   SEARCH BAR
-   ===================================== */
+/* SEARCH BAR */
 
 #favorites-app #fav-search {
     display: block;
     width: 100%;
     box-sizing: border-box;
-
     padding: 12px 14px;
     margin: 0 0 14px;
-
     background: transparent;
     color: inherit;
-
     border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 8px;
-
     font: inherit;
     font-size: 0.9em;
 }
@@ -44,9 +38,7 @@
 }
 
 
-/* =====================================
-   CATEGORY FILTER
-   ===================================== */
+/* CATEGORY FILTER */
 
 #favorites-app #fav-categories {
     display: flex;
@@ -57,18 +49,13 @@
 
 #favorites-app .fav-filter {
     padding: 6px 14px;
-
     background: transparent;
     color: inherit;
-
     border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 30px;
-
     font: inherit;
     font-size: 0.8em;
-
     cursor: pointer;
-
     transition: background 0.2s;
 }
 
@@ -83,9 +70,7 @@
 }
 
 
-/* =====================================
-   PRODUCT COUNT
-   ===================================== */
+/* PRODUCT COUNT */
 
 #favorites-app #fav-count {
     font-size: 0.75em;
@@ -94,44 +79,28 @@
 }
 
 
-/* =====================================
-   MAIN GRID
-   ===================================== */
+/* MAIN GRID */
 
 #favorites-app #fav-list {
     display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
 }
 
 
-/* =====================================
-   PRODUCT CARD
-   ===================================== */
+/* PRODUCT CARD */
 
 #favorites-app .fav-card {
     display: flex;
     flex-direction: column;
-
     box-sizing: border-box;
     min-width: 0;
-
     margin: 0;
     padding: 16px;
-
-    border: 1px solid
-        rgba(128, 128, 128, 0.3);
-
+    border: 1px solid rgba(128, 128, 128, 0.3);
     border-radius: 12px;
-
     background: rgba(128, 128, 128, 0.04);
-
-    transition:
-        background 0.2s,
-        border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 #favorites-app .fav-card:hover {
@@ -140,55 +109,40 @@
 }
 
 
-/* =====================================
-   PRODUCT HEADER
-   ===================================== */
+/* PRODUCT HEADER */
 
 #favorites-app .fav-header {
     display: flex;
     align-items: center;
     gap: 12px;
-
     margin-bottom: 12px;
 }
 
 
-/* =====================================
-   SVG ICON
-   ===================================== */
+/* SVG ICON */
 
 #favorites-app .fav-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-
     flex-shrink: 0;
-
     width: 46px;
     height: 46px;
-
     background: rgba(128, 128, 128, 0.12);
-
     border-radius: 10px;
-
     color: inherit;
 }
 
 #favorites-app .fav-icon svg {
     display: block;
-
     width: 24px;
     height: 24px;
-
     max-width: 100%;
-
     color: inherit;
 }
 
 
-/* =====================================
-   PRODUCT HEADING
-   ===================================== */
+/* PRODUCT HEADING */
 
 #favorites-app .fav-heading {
     flex: 1;
@@ -197,14 +151,10 @@
 
 #favorites-app .fav-category {
     display: block;
-
     font-size: 0.75em;
     line-height: 1.3;
-
     opacity: 0.65;
-
     margin: 0 0 3px;
-
     overflow-wrap: anywhere;
 }
 
@@ -212,74 +162,50 @@
     font-size: 1.05em;
     font-weight: 700;
     line-height: 1.35;
-
     margin: 0;
-
     overflow-wrap: anywhere;
 }
 
 
-/* =====================================
-   PRODUCT DESCRIPTION
-   ===================================== */
+/* PRODUCT DESCRIPTION */
 
 #favorites-app .fav-notes {
     font-size: 0.85em;
     line-height: 1.6;
-
     margin: 0 0 14px;
-
     overflow-wrap: anywhere;
 }
 
 
-/* =====================================
-   LINKS CONTAINER
-   ===================================== */
+/* LINKS CONTAINER */
 
 #favorites-app .fav-links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-
     gap: 8px;
-
     margin-top: auto;
     padding-top: 12px;
-
-    border-top: 1px solid
-        rgba(128, 128, 128, 0.2);
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 
-/* =====================================
-   LINK BUTTONS
-   ===================================== */
+/* LINK BUTTONS */
 
 #favorites-app .fav-links a {
     display: inline-flex;
     align-items: center;
-
     box-sizing: border-box;
     max-width: 100%;
-
     padding: 6px 10px;
     margin: 0;
-
-    border: 1px solid
-        rgba(128, 128, 128, 0.35);
-
+    border: 1px solid rgba(128, 128, 128, 0.35);
     border-radius: 6px;
-
     font-size: 0.75em;
     line-height: 1.4;
-
     text-decoration: none;
     overflow-wrap: anywhere;
-
-    transition:
-        background 0.2s,
-        border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 #favorites-app .fav-links a:hover {
@@ -299,24 +225,17 @@
 }
 
 
-/* =====================================
-   EMPTY STATE
-   ===================================== */
+/* EMPTY STATE */
 
 #favorites-app .fav-empty {
     grid-column: 1 / -1;
-
     padding: 24px 0;
-
     text-align: center;
-
     opacity: 0.7;
 }
 
 
-/* =====================================
-   MOBILE RESPONSIVE
-   ===================================== */
+/* MOBILE RESPONSIVE */
 
 @media (max-width: 600px) {
 
@@ -342,9 +261,7 @@
 }
 
 
-/* =====================================
-   REDUCED MOTION
-   ===================================== */
+/* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
 
