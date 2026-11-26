@@ -1,9 +1,8 @@
 
 (async function () {
 
-    // =====================================
-    // FAVORITES V7 - SVG ICONS
-    // =====================================
+    // FAVORITES V7.1
+    // SVG Icons + Emoji Dropdown Support
 
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYXbWm91TscNYnshYOgKCxhEiXrhd224ALy42NRoYY_blTVOzBwRrq2v-J8Z0Bt_xQyD5E706IOqXY/pub?gid=0&single=true&output=csv";
 
@@ -189,13 +188,18 @@
 
     // =====================================
     // CREATE SVG ICON
+    // SUPPORT EMOJI DROPDOWN
     // =====================================
 
     function createIcon(product) {
 
         const requested = String(
             product["Icon"] || ""
-        ).trim().toLowerCase();
+        )
+            .trim()
+            .toLowerCase()
+            .split(/\s+/)
+            .pop();
 
         const category = String(
             product["Kategori"] || ""
