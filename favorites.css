@@ -1,7 +1,7 @@
 
-/* ==========================
-   MAIN CONTAINER
-   ========================== */
+/* =====================================
+   FAVORITES V5
+   ===================================== */
 
 #favorites-app {
     width: 100%;
@@ -11,22 +11,31 @@
 }
 
 
-/* ==========================
+/* =====================================
    SEARCH BAR
-   ========================== */
+   ===================================== */
 
 #favorites-app #fav-search {
     display: block;
     width: 100%;
     box-sizing: border-box;
+
     padding: 14px 16px;
-    margin-bottom: 16px;
+    margin: 0 0 16px;
+
     background: transparent;
     color: inherit;
+
     border: 1px solid rgba(128, 128, 128, 0.5);
     border-radius: 8px;
+
     font: inherit;
     font-size: 0.9em;
+}
+
+#favorites-app #fav-search::placeholder {
+    color: inherit;
+    opacity: 0.5;
 }
 
 #favorites-app #fav-search:focus {
@@ -35,26 +44,35 @@
 }
 
 
-/* ==========================
+/* =====================================
    CATEGORY FILTER
-   ========================== */
+   ===================================== */
 
 #favorites-app #fav-categories {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+
     margin-bottom: 16px;
 }
 
 #favorites-app .fav-filter {
     padding: 7px 16px;
-    border: 1px solid rgba(128, 128, 128, 0.5);
-    border-radius: 30px;
+
     background: transparent;
     color: inherit;
+
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 30px;
+
     font: inherit;
     font-size: 0.8em;
+
     cursor: pointer;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s;
 }
 
 #favorites-app .fav-filter:hover {
@@ -68,9 +86,9 @@
 }
 
 
-/* ==========================
+/* =====================================
    PRODUCT COUNT
-   ========================== */
+   ===================================== */
 
 #favorites-app #fav-count {
     font-size: 0.75em;
@@ -79,30 +97,37 @@
 }
 
 
-/* ==========================
+/* =====================================
    GRID LAYOUT
-   ========================== */
+   ===================================== */
 
 #favorites-app #fav-list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
     gap: 16px;
 }
 
 
-/* ==========================
+/* =====================================
    PRODUCT CARD
-   ========================== */
+   ===================================== */
 
 #favorites-app .fav-card {
     display: flex;
     flex-direction: column;
+
     box-sizing: border-box;
     min-width: 0;
+
     margin: 0;
     padding: 20px;
 
-    border: 1px solid rgba(128, 128, 128, 0.3);
+    border: 1px solid
+        rgba(128, 128, 128, 0.3);
+
     border-radius: 12px;
 
     background: rgba(128, 128, 128, 0.04);
@@ -118,9 +143,9 @@
 }
 
 
-/* ==========================
+/* =====================================
    CATEGORY ICON
-   ========================== */
+   ===================================== */
 
 #favorites-app .fav-card::before {
     content: "◇";
@@ -131,12 +156,18 @@
 
     width: 48px;
     height: 48px;
+
     margin-bottom: 14px;
 
     background: rgba(128, 128, 128, 0.12);
+
     border-radius: 10px;
+
     font-size: 24px;
 }
+
+
+/* TECH */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="tech"]
@@ -144,17 +175,26 @@
     content: "⌘";
 }
 
+
+/* FOOD */
+
 #favorites-app .fav-card:has(
     .fav-category[data-category="food"]
 )::before {
     content: "♨";
 }
 
+
+/* GAMING */
+
 #favorites-app .fav-card:has(
     .fav-category[data-category="gaming"]
 )::before {
     content: "✦";
 }
+
+
+/* LIFESTYLE */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="lifestyle"]
@@ -163,63 +203,159 @@
 }
 
 
-/* ==========================
-   PRODUCT INFORMATION
-   ========================== */
+/* BOOKS */
+
+#favorites-app .fav-card:has(
+    .fav-category[data-category="books"]
+)::before {
+    content: "▤";
+}
+
+
+/* AUDIO */
+
+#favorites-app .fav-card:has(
+    .fav-category[data-category="audio"]
+)::before {
+    content: "♫";
+}
+
+
+/* HOME */
+
+#favorites-app .fav-card:has(
+    .fav-category[data-category="home"]
+)::before {
+    content: "⌂";
+}
+
+
+/* =====================================
+   CATEGORY LABEL
+   ===================================== */
 
 #favorites-app .fav-category {
     display: block;
+
     font-size: 0.75em;
     opacity: 0.65;
+
     margin: 0 0 6px;
 }
+
+
+/* =====================================
+   PRODUCT TITLE
+   ===================================== */
 
 #favorites-app .fav-card h3 {
     font-size: 1.05em;
     font-weight: 700;
     line-height: 1.4;
+
     margin: 0 0 8px;
+
     overflow-wrap: anywhere;
 }
 
-#favorites-app .fav-card p {
+
+/* =====================================
+   PRODUCT NOTES
+   ===================================== */
+
+#favorites-app .fav-notes {
     font-size: 0.85em;
     line-height: 1.6;
+
     margin: 0 0 16px;
+
     overflow-wrap: anywhere;
 }
 
 
-/* ==========================
-   PRODUCT LINKS
-   ========================== */
+/* =====================================
+   LINKS CONTAINER
+   ===================================== */
 
 #favorites-app .fav-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 14px;
+    align-items: center;
+
+    gap: 8px;
 
     margin-top: auto;
-    padding-top: 12px;
+    padding-top: 14px;
 
     border-top: 1px solid
         rgba(128, 128, 128, 0.2);
 }
 
+
+/* =====================================
+   LINK BUTTONS
+   ===================================== */
+
 #favorites-app .fav-links a {
+    display: inline-flex;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    padding: 6px 10px;
+    margin: 0;
+
+    border: 1px solid
+        rgba(128, 128, 128, 0.35);
+
+    border-radius: 6px;
+
     font-size: 0.75em;
+    line-height: 1.4;
+
     text-decoration: none;
-    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s;
 }
 
 #favorites-app .fav-links a:hover {
-    text-decoration: underline;
+    background: rgba(128, 128, 128, 0.15);
+    border-color: currentColor;
+}
+
+#favorites-app .fav-shop-link {
+    background: rgba(128, 128, 128, 0.12);
+    font-weight: 600;
+}
+
+#favorites-app .fav-links a:focus-visible,
+#favorites-app .fav-filter:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 
-/* ==========================
+/* =====================================
+   EMPTY STATE
+   ===================================== */
+
+#favorites-app .fav-empty {
+    grid-column: 1 / -1;
+
+    padding: 24px 0;
+
+    text-align: center;
+
+    opacity: 0.7;
+}
+
+
+/* =====================================
    MOBILE RESPONSIVE
-   ========================== */
+   ===================================== */
 
 @media (max-width: 600px) {
 
@@ -230,6 +366,27 @@
 
     #favorites-app .fav-card {
         padding: 16px;
+    }
+
+    #favorites-app .fav-card::before {
+        width: 42px;
+        height: 42px;
+        font-size: 20px;
+    }
+
+}
+
+
+/* =====================================
+   REDUCED MOTION
+   ===================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #favorites-app .fav-card,
+    #favorites-app .fav-filter,
+    #favorites-app .fav-links a {
+        transition: none;
     }
 
 }
