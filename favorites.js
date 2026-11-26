@@ -25,6 +25,81 @@
     const list = app.querySelector("#fav-list");
     const count = app.querySelector("#fav-count");
 
+    // Memeriksa dan melengkapi URL
+    function normalizeURL(value) {
+
+        let url = String(value || "").trim();
+
+        if (!url) return null;
+
+        if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) {
+            if (!/^[\w-]+(\.[\w-]+)+([/:?#]|$)/.test(url)) {
+                return null;
+            }
+
+            url = "https://" + url;
+        }
+
+        try {
+            const parsed = new URL(url);
+
+            if (
+                ["http:", "https:"].includes(parsed.protocol) &&
+                parsed.hostname.includes(".")
+            ) {
+                return parsed;
+            }
+        } catch {
+            return null;
+        }
+
+        return null;
+    }
+
+    // Mendeteksi nama marketplace
+    function marketplaceName(url) {
+
+        const host = url.hostname.toLowerCase();
+
+        const matches = domain =>
+            host === domain || host.endsWith("." + domain);
+
+        if (matches("shopee.co.id") || matches("shope.ee")) {
+            return "Shopee";
+        }
+
+        if (matches("tokopedia.com") || matches("tokopedia.link")) {
+            return "Tokopedia";
+        }
+
+        if (matches("lazada.co.id")) {
+            return "Lazada";
+        }
+
+        if (matches("blibli.com")) {
+            return "Blibli";
+        }
+
+        return "Lihat Produk";
+    }
+
+    // Membuat tautan yang bisa diklik
+    function createLink(url, label, affiliate = false) {
+
+        const link = document.createElement("a");
+
+        link.href = url.href;
+        link.textContent = label + " ↗";
+        link.target = "_blank";
+
+        link.rel = affiliate
+            ? "noopener noreferrer sponsored"
+            : "noopener noreferrer";
+
+        return link;
+    }
+
+    // Menampilkan katalog
     function render() {
 
         const keyword = search.value.toLowerCase();
@@ -34,8 +109,7 @@
             const matchesSearch = [
                 product["Produk"],
                 product["Kategori"],
-                product["Catatan"],
-                product["Testimoni Saya"]
+                product["Catatan"]
             ].join(" ").toLowerCase().includes(keyword);
 
             const matchesCategory =
@@ -68,42 +142,56 @@
             const notes = document.createElement("p");
             notes.textContent = product["Catatan"];
 
-            const testimonial = document.createElement("p");
-            testimonial.className = "fav-testimonial";
-            testimonial.textContent = product["Testimoni Saya"];
-
             card.append(category, title);
 
             if (product["Catatan"]) {
                 card.appendChild(notes);
             }
 
-            if (product["Testimoni Saya"]) {
-                card.appendChild(testimonial);
+            // Membuat bagian tautan
+            const links = document.createElement("div");
+            links.className = "fav-links";
+
+            // Link testimoni
+            const testimonialURL = normalizeURL(
+                product["Testimoni Saya"]
+            );
+
+            if (testimonialURL) {
+
+                links.appendChild(
+                    createLink(
+                        testimonialURL,
+                        "Baca Testimoni"
+                    )
+                );
             }
 
-            try {
-                const url = new URL(product["Link"]);
+            // Link affiliate
+            const productURL = normalizeURL(
+                product["Link"]
+            );
 
-                if (["https:", "http:"].includes(url.protocol)) {
+            if (productURL) {
 
-                    const link = document.createElement("a");
-                    link.href = url.href;
-                    link.textContent = "Lihat produk ↗";
-                    link.target = "_blank";
-                    link.rel = "noopener noreferrer sponsored";
+                links.appendChild(
+                    createLink(
+                        productURL,
+                        marketplaceName(productURL),
+                        true
+                    )
+                );
+            }
 
-                    card.appendChild(link);
-                }
-
-            } catch {
-                // Link kosong atau bukan URL valid.
+            if (links.children.length) {
+                card.appendChild(links);
             }
 
             list.appendChild(card);
         });
     }
 
+    // Membuat kategori otomatis
     function createCategories() {
 
         const names = [...new Set(
@@ -117,8 +205,10 @@
             button.type = "button";
             button.textContent = name || "Semua";
             button.className = "fav-filter";
+
             button.setAttribute(
-                "aria-pressed", String(name === selectedCategory)
+                "aria-pressed",
+                String(name === selectedCategory)
             );
 
             button.addEventListener("click", () => {
@@ -133,6 +223,7 @@
 
                 button.classList.add("active");
                 button.setAttribute("aria-pressed", "true");
+
                 render();
             });
 
@@ -144,6 +235,7 @@
 
     search.addEventListener("input", render);
 
+    // Mengambil data Google Sheets
     try {
 
         const response = await fetch(SHEET_URL);
