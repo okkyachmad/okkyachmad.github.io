@@ -1,31 +1,51 @@
 
 (async function () {
 
+    // =====================================
+    // CONFIGURATION
+    // =====================================
+
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRYXbWm91TscNYnshYOgKCxhEiXrhd224ALy42NRoYY_blTVOzBwRrq2v-J8Z0Bt_xQyD5E706IOqXY/pub?gid=0&single=true&output=csv";
 
     const app = document.getElementById("favorites-app");
 
     if (!app) return;
 
-    app.innerHTML = `
-        <input type="search"
-            id="fav-search"
-            placeholder="Cari produk atau catatan...">
-
-        <div id="fav-categories"></div>
-        <p id="fav-count"></p>
-        <div id="fav-list">Memuat produk...</div>
-    `;
-
     let products = [];
     let selectedCategory = "";
+
+
+    // =====================================
+    // MAIN STRUCTURE
+    // =====================================
+
+    app.innerHTML = `
+        <input
+            type="search"
+            id="fav-search"
+            aria-label="Cari produk"
+            placeholder="Cari produk atau catatan..."
+        >
+
+        <div id="fav-categories"></div>
+
+        <p id="fav-count" aria-live="polite"></p>
+
+        <div id="fav-list">
+            Memuat produk...
+        </div>
+    `;
 
     const search = app.querySelector("#fav-search");
     const categories = app.querySelector("#fav-categories");
     const list = app.querySelector("#fav-list");
     const count = app.querySelector("#fav-count");
 
-    // Memeriksa dan melengkapi URL
+
+    // =====================================
+    // URL VALIDATION
+    // =====================================
+
     function normalizeURL(value) {
 
         let url = String(value || "").trim();
@@ -33,6 +53,7 @@
         if (!url) return null;
 
         if (!/^[a-z][a-z0-9+.-]*:/i.test(url)) {
+
             if (!/^[\w-]+(\.[\w-]+)+([/:?#]|$)/.test(url)) {
                 return null;
             }
@@ -41,14 +62,18 @@
         }
 
         try {
+
             const parsed = new URL(url);
 
             if (
                 ["http:", "https:"].includes(parsed.protocol) &&
-                parsed.hostname.includes(".")
+                parsed.hostname.includes(".") &&
+                !parsed.username &&
+                !parsed.password
             ) {
                 return parsed;
             }
+
         } catch {
             return null;
         }
@@ -56,7 +81,11 @@
         return null;
     }
 
-    // Mendeteksi nama marketplace
+
+    // =====================================
+    // MARKETPLACE DETECTION
+    // =====================================
+
     function marketplaceName(url) {
 
         const host = url.hostname.toLowerCase();
@@ -64,11 +93,17 @@
         const matches = domain =>
             host === domain || host.endsWith("." + domain);
 
-        if (matches("shopee.co.id") || matches("shope.ee")) {
+        if (
+            matches("shopee.co.id") ||
+            matches("shope.ee")
+        ) {
             return "Shopee";
         }
 
-        if (matches("tokopedia.com") || matches("tokopedia.link")) {
+        if (
+            matches("tokopedia.com") ||
+            matches("tokopedia.link")
+        ) {
             return "Tokopedia";
         }
 
@@ -83,7 +118,11 @@
         return "Lihat Produk";
     }
 
-    // Membuat tautan yang bisa diklik
+
+    // =====================================
+    // CREATE CLICKABLE LINKS
+    // =====================================
+
     function createLink(url, label, affiliate = false) {
 
         const link = document.createElement("a");
@@ -99,18 +138,27 @@
         return link;
     }
 
-    // Menampilkan katalog
+
+    // =====================================
+    // RENDER PRODUCT CARDS
+    // =====================================
+
     function render() {
 
-        const keyword = search.value.toLowerCase();
+        const keyword = search.value.trim().toLowerCase();
 
         const filtered = products.filter(product => {
 
-            const matchesSearch = [
+            const searchableText = [
                 product["Produk"],
                 product["Kategori"],
-                product["Catatan"]
-            ].join(" ").toLowerCase().includes(keyword);
+                product["Catatan"],
+                product["Label Testimoni"],
+                product["Label Link"]
+            ].join(" ").toLowerCase();
+
+            const matchesSearch =
+                searchableText.includes(keyword);
 
             const matchesCategory =
                 !selectedCategory ||
@@ -120,27 +168,60 @@
         });
 
         count.textContent = filtered.length + " produk";
+
         list.replaceChildren();
 
         if (!filtered.length) {
-            list.textContent = "Produk tidak ditemukan.";
+
+            const empty = document.createElement("p");
+
+            empty.className = "fav-empty";
+            empty.textContent = "Produk tidak ditemukan.";
+
+            list.appendChild(empty);
+
             return;
         }
 
         filtered.forEach(product => {
 
             const card = document.createElement("article");
+
             card.className = "fav-card";
 
+
+            // CATEGORY
+
             const category = document.createElement("small");
+
             category.className = "fav-category";
-            category.textContent = product["Kategori"];
+
+            category.textContent =
+                product["Kategori"] || "Lainnya";
+
+            category.dataset.category =
+                (product["Kategori"] || "")
+                .trim()
+                .toLowerCase();
+
+
+            // PRODUCT NAME
 
             const title = document.createElement("h3");
+
             title.textContent = product["Produk"];
 
+
+            // PRODUCT NOTES
+
             const notes = document.createElement("p");
-            notes.textContent = product["Catatan"];
+
+            notes.className = "fav-notes";
+
+            notes.textContent = product["Catatan"] || "";
+
+
+            // CARD CONTENT
 
             card.append(category, title);
 
@@ -148,54 +229,85 @@
                 card.appendChild(notes);
             }
 
-            // Membuat bagian tautan
+
+            // LINKS CONTAINER
+
             const links = document.createElement("div");
+
             links.className = "fav-links";
 
-            // Link testimoni
+
+            // TESTIMONIAL LINK
+
             const testimonialURL = normalizeURL(
                 product["Testimoni Saya"]
             );
 
             if (testimonialURL) {
 
-                links.appendChild(
-                    createLink(
-                        testimonialURL,
-                        "Baca Testimoni"
-                    )
+                const testimonialLabel =
+                    product["Label Testimoni"] ||
+                    "Baca Testimoni";
+
+                const testimonialLink = createLink(
+                    testimonialURL,
+                    testimonialLabel
                 );
+
+                testimonialLink.className =
+                    "fav-review-link";
+
+                links.appendChild(testimonialLink);
             }
 
-            // Link affiliate
+
+            // AFFILIATE LINK
+
             const productURL = normalizeURL(
                 product["Link"]
             );
 
             if (productURL) {
 
-                links.appendChild(
-                    createLink(
-                        productURL,
-                        marketplaceName(productURL),
-                        true
-                    )
+                const productLabel =
+                    product["Label Link"] ||
+                    marketplaceName(productURL);
+
+                const affiliateLink = createLink(
+                    productURL,
+                    productLabel,
+                    true
                 );
+
+                affiliateLink.className =
+                    "fav-shop-link";
+
+                links.appendChild(affiliateLink);
             }
+
+
+            // ADD LINKS TO CARD
 
             if (links.children.length) {
                 card.appendChild(links);
             }
 
             list.appendChild(card);
+
         });
     }
 
-    // Membuat kategori otomatis
+
+    // =====================================
+    // AUTOMATIC CATEGORY FILTER
+    // =====================================
+
     function createCategories() {
 
+        categories.replaceChildren();
+
         const names = [...new Set(
-            products.map(p => p["Kategori"])
+            products.map(product => product["Kategori"])
         )].filter(Boolean).sort();
 
         ["", ...names].forEach(name => {
@@ -211,34 +323,62 @@
                 String(name === selectedCategory)
             );
 
+            if (name === selectedCategory) {
+                button.classList.add("active");
+            }
+
             button.addEventListener("click", () => {
 
                 selectedCategory = name;
 
                 categories.querySelectorAll("button")
-                    .forEach(b => {
-                        b.classList.remove("active");
-                        b.setAttribute("aria-pressed", "false");
+                    .forEach(item => {
+
+                        item.classList.remove("active");
+
+                        item.setAttribute(
+                            "aria-pressed",
+                            "false"
+                        );
+
                     });
 
                 button.classList.add("active");
-                button.setAttribute("aria-pressed", "true");
+
+                button.setAttribute(
+                    "aria-pressed",
+                    "true"
+                );
 
                 render();
             });
 
-            if (!name) button.classList.add("active");
-
             categories.appendChild(button);
+
         });
     }
 
+
+    // =====================================
+    // SEARCH
+    // =====================================
+
     search.addEventListener("input", render);
 
-    // Mengambil data Google Sheets
+
+    // =====================================
+    // LOAD GOOGLE SHEETS
+    // =====================================
+
     try {
 
-        const response = await fetch(SHEET_URL);
+        if (typeof Papa === "undefined") {
+            throw new Error("Papa Parse belum dimuat.");
+        }
+
+        const response = await fetch(SHEET_URL, {
+            cache: "no-cache"
+        });
 
         if (!response.ok) {
             throw new Error("Gagal mengambil data.");
@@ -247,21 +387,38 @@
         const csv = await response.text();
 
         const result = Papa.parse(csv, {
+
             header: true,
+
             skipEmptyLines: "greedy",
-            transformHeader: h => h.trim(),
-            transform: v => v.trim()
+
+            transformHeader: header =>
+                header.trim(),
+
+            transform: value =>
+                value.trim()
+
         });
 
-        products = result.data.filter(p => p["Produk"]);
+        if (!result.meta.fields?.includes("Produk")) {
+            throw new Error("Header spreadsheet tidak sesuai.");
+        }
+
+        products = result.data.filter(
+            product => product["Produk"]
+        );
 
         createCategories();
+
         render();
 
     } catch (error) {
 
-        list.textContent = "Gagal memuat daftar produk.";
-        console.error(error);
+        list.textContent =
+            "Gagal memuat katalog. Silakan refresh halaman.";
+
+        console.error("Favorites:", error);
+
     }
 
 })();
