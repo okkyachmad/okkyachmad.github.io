@@ -154,7 +154,7 @@
                 product["Kategori"],
                 product["Catatan"],
                 product["Label Testimoni"],
-                product["Label Link Beli"]
+                product["Label Link"]
             ].join(" ").toLowerCase();
 
             const matchesSearch =
