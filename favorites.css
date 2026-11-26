@@ -1,0 +1,76 @@
+
+#favorites-app {
+    margin: 24px 0;
+    font-family: inherit;
+    color: inherit;
+}
+
+#favorites-app #fav-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+}
+
+#favorites-app #fav-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+#favorites-app .fav-filter {
+    padding: 6px 14px;
+    border: 1px solid currentColor;
+    border-radius: 20px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+#favorites-app .fav-filter.active {
+    background: rgba(128, 128, 128, 0.25);
+    font-weight: bold;
+}
+
+#favorites-app #fav-count {
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+#favorites-app .fav-card {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+#favorites-app .fav-category {
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+#favorites-app .fav-card h3 {
+    margin: 6px 0 10px;
+}
+
+#favorites-app .fav-card p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+#favorites-app .fav-testimonial {
+    font-style: italic;
+    opacity: 0.85;
+}
+
+#favorites-app .fav-card a {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 0.9em;
+}
