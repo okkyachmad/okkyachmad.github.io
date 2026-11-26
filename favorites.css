@@ -1,6 +1,6 @@
 
 /* =====================================
-   FAVORITES V5
+   FAVORITES V6 - COMPACT GRID
    ===================================== */
 
 #favorites-app {
@@ -20,8 +20,8 @@
     width: 100%;
     box-sizing: border-box;
 
-    padding: 14px 16px;
-    margin: 0 0 16px;
+    padding: 12px 14px;
+    margin: 0 0 14px;
 
     background: transparent;
     color: inherit;
@@ -52,12 +52,11 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 #favorites-app .fav-filter {
-    padding: 7px 16px;
+    padding: 6px 14px;
 
     background: transparent;
     color: inherit;
@@ -70,9 +69,7 @@
 
     cursor: pointer;
 
-    transition:
-        background 0.2s,
-        border-color 0.2s;
+    transition: background 0.2s;
 }
 
 #favorites-app .fav-filter:hover {
@@ -93,12 +90,12 @@
 #favorites-app #fav-count {
     font-size: 0.75em;
     opacity: 0.65;
-    margin: 12px 0 18px;
+    margin: 12px 0 16px;
 }
 
 
 /* =====================================
-   GRID LAYOUT
+   MAIN GRID
    ===================================== */
 
 #favorites-app #fav-list {
@@ -107,23 +104,33 @@
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: 14px;
 }
 
 
 /* =====================================
-   PRODUCT CARD
+   COMPACT PRODUCT CARD
    ===================================== */
 
 #favorites-app .fav-card {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+
+    grid-template-columns:
+        48px minmax(0, 1fr);
+
+    grid-template-rows:
+        auto auto 1fr auto;
+
+    column-gap: 12px;
+    row-gap: 0;
+
+    align-content: start;
 
     box-sizing: border-box;
     min-width: 0;
 
     margin: 0;
-    padding: 20px;
+    padding: 18px;
 
     border: 1px solid
         rgba(128, 128, 128, 0.3);
@@ -144,20 +151,24 @@
 
 
 /* =====================================
-   CATEGORY ICON
+   CATEGORY ICON - LEFT SIDE
    ===================================== */
 
 #favorites-app .fav-card::before {
     content: "◇";
 
+    grid-column: 1;
+    grid-row: 1 / 3;
+
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: center;
 
     width: 48px;
     height: 48px;
 
-    margin-bottom: 14px;
+    margin: 0;
 
     background: rgba(128, 128, 128, 0.12);
 
@@ -167,7 +178,9 @@
 }
 
 
-/* TECH */
+/* =====================================
+   CATEGORY SPECIFIC ICONS
+   ===================================== */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="tech"]
@@ -175,17 +188,11 @@
     content: "⌘";
 }
 
-
-/* FOOD */
-
 #favorites-app .fav-card:has(
     .fav-category[data-category="food"]
 )::before {
     content: "♨";
 }
-
-
-/* GAMING */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="gaming"]
@@ -193,17 +200,11 @@
     content: "✦";
 }
 
-
-/* LIFESTYLE */
-
 #favorites-app .fav-card:has(
     .fav-category[data-category="lifestyle"]
 )::before {
     content: "♡";
 }
-
-
-/* BOOKS */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="books"]
@@ -211,17 +212,11 @@
     content: "▤";
 }
 
-
-/* AUDIO */
-
 #favorites-app .fav-card:has(
     .fav-category[data-category="audio"]
 )::before {
     content: "♫";
 }
-
-
-/* HOME */
 
 #favorites-app .fav-card:has(
     .fav-category[data-category="home"]
@@ -231,61 +226,78 @@
 
 
 /* =====================================
-   CATEGORY LABEL
+   CATEGORY LABEL - RIGHT SIDE
    ===================================== */
 
 #favorites-app .fav-category {
+    grid-column: 2;
+    grid-row: 1;
+
     display: block;
+    align-self: end;
 
     font-size: 0.75em;
     opacity: 0.65;
 
-    margin: 0 0 6px;
+    margin: 0 0 3px;
+
+    overflow-wrap: anywhere;
 }
 
 
 /* =====================================
-   PRODUCT TITLE
+   PRODUCT TITLE - RIGHT SIDE
    ===================================== */
 
 #favorites-app .fav-card h3 {
+    grid-column: 2;
+    grid-row: 2;
+
+    align-self: start;
+
     font-size: 1.05em;
     font-weight: 700;
-    line-height: 1.4;
+    line-height: 1.35;
 
-    margin: 0 0 8px;
+    margin: 0;
 
     overflow-wrap: anywhere;
 }
 
 
 /* =====================================
-   PRODUCT NOTES
+   PRODUCT DESCRIPTION - FULL WIDTH
    ===================================== */
 
 #favorites-app .fav-notes {
+    grid-column: 1 / -1;
+    grid-row: 3;
+
     font-size: 0.85em;
     line-height: 1.6;
 
-    margin: 0 0 16px;
+    margin: 12px 0 14px;
 
     overflow-wrap: anywhere;
 }
 
 
 /* =====================================
-   LINKS CONTAINER
+   LINKS CONTAINER - FULL WIDTH
    ===================================== */
 
 #favorites-app .fav-links {
+    grid-column: 1 / -1;
+    grid-row: 4;
+
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 
     gap: 8px;
 
-    margin-top: auto;
-    padding-top: 14px;
+    margin-top: 4px;
+    padding-top: 12px;
 
     border-top: 1px solid
         rgba(128, 128, 128, 0.2);
@@ -365,7 +377,11 @@
     }
 
     #favorites-app .fav-card {
+        grid-template-columns:
+            42px minmax(0, 1fr);
+
         padding: 16px;
+        column-gap: 12px;
     }
 
     #favorites-app .fav-card::before {
